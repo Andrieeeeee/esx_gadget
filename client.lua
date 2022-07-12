@@ -116,51 +116,6 @@ function OpenBuyDialogMenu(itemName, BuyPrice)
 	end)
 end
 
--- Function for gadget Shop Sell Menu:
-function gadgetShopSellMenu()
-	local player = PlayerPedId()
-	FreezeEntityPosition(player,true)
-	local elements = {}
-			
-	for k,v in pairs(Config.ItemsIngadgetShop) do
-		if v.SellIngadgetShop == true then
-			table.insert(elements,{label = v.label .. " | "..('<span style="color:green;">%s</span>'):format("$"..v.SellPrice..""), itemName = v.itemName, SellIngadgetShop = v.SellIngadgetShop, SellPrice = v.SellPrice})
-		end
-	end
-		
-	ESX.UI.Menu.Open('default', GetCurrentResourceName(), "esx_gadgetShop_sell_menu",
-		{
-			title    = "What do you want to sell?",
-			align    = "top-left",
-			elements = elements
-		},
-	function(data, menu)
-			if data.current.itemName == data.current.itemName then
-				OpenSellDialogMenu(data.current.itemName,data.current.SellPrice)
-			end	
-	end, function(data, menu)
-		menu.close()
-		insideMarker = false
-		FreezeEntityPosition(player,false)
-	end, function(data, menu)
-	end)
-end
-
--- Function for gadget Shop Sell Dialog
-function OpenSellDialogMenu(itemName, SellPrice)
-	ESX.UI.Menu.Open('dialog', GetCurrentResourceName(), 'esx_gadgetShop_amount_to_sell_dialog', {
-		title = "Amount to Sell?"
-	}, function(data, menu)
-		menu.close()
-		amountToSell = tonumber(data.value)
-		totalSellPrice = (SellPrice * amountToSell)
-		TriggerServerEvent("esx_gadgetShop:SellItem",amountToSell,totalSellPrice,itemName)
-	end,
-	function(data, menu)
-		menu.close()	
-	end)
-end
-
 -- Blip on Map for gadget Shops:
 Citizen.CreateThread(function()
 	if Config.EnablegadgetShopBlip == true then	
